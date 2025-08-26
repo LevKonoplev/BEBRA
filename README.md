@@ -41,3 +41,13 @@ python -m mmw.prices --since 2022-01-01
 ```
 
 По умолчанию при отсутствии параметра `--since` загружаются данные за последние три года.
+
+## Индексы
+Проект может хранить значения отраслевых индексов. Исторические данные можно заносить вручную в файл `data/indices_manual.csv` и импортировать функцией `import_indices_from_csv()`.
+
+- **HARPEX** — индекс фрахтовых ставок контейнерных судов от Harper Petersen. Официальная страница: https://www.harperpetersen.com/harpex
+- **SCFI** — Shanghai Containerized Freight Index. Публикация: https://en.sse.net.cn/indices/scfi
+- **WCI** — World Container Index (Drewry). Официальная страница: https://www.drewry.co.uk/supply-chain-expertise/world-container-index-drewry
+- **FBX** — Freightos Baltic Index. Официальная страница: https://fbx.freightos.com/
+
+Парсеры для получения текущих значений доступны, однако использовать их следует только если это не нарушает условия использования сайтов и правила robots.txt. В остальных случаях данные лучше загружать вручную через CSV.
