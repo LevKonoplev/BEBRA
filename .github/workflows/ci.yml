@@ -3,9 +3,31 @@ name: CI
 on:
   push:
   pull_request:
+  schedule:
+    - cron: "*/30 * * * *"
 
 jobs:
-  build:
+  tests:
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install flake8 mypy
+      - name: Run linters
+        run: |
+          flake8 src
+          mypy src
+      - name: Smoke test
+        run: python -m mmw.prices --since 2022-01-01
+
+  scheduled:
+    if: github.event_name == 'schedule'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -14,5 +36,23 @@ jobs:
           python-version: '3.11'
       - name: Install dependencies
         run: pip install -r requirements.txt
-      - name: Run checks
-        run: python -m compileall src
+      - name: Update data
+        run: |
+          python -m mmw.prices --since 2022-01-01
+          python -m mmw.indices
+          python -m mmw.news
+          python -m mmw.nlp
+          python -m mmw.linker
+          python -m mmw.analytics
+          python -m mmw.report
+      - name: Commit and push changes
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          shopt -s nullglob
+          git add data/*.sqlite data/*.db data/*.csv docs/*
+          if ! git diff --quiet --staged; then
+            git commit -m "chore: auto-update site [skip ci]"
+            git push
+          fi
+
