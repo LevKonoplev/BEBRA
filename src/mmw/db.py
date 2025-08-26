@@ -12,6 +12,7 @@ from sqlalchemy import (
     Integer,
     String,
     Text,
+    UniqueConstraint,
     create_engine,
 )
 from sqlalchemy.orm import declarative_base, relationship, sessionmaker
@@ -35,6 +36,7 @@ class Asset(Base):
 
 class Price(Base):
     __tablename__ = "prices"
+    __table_args__ = (UniqueConstraint("asset_id", "date", name="uix_price_asset_date"),)
 
     id = Column(Integer, primary_key=True)
     asset_id = Column(Integer, ForeignKey("assets.id"), nullable=False)
