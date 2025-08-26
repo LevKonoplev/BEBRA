@@ -99,9 +99,10 @@ def import_indices_from_csv(path: Path = DATA_DIR / "indices_manual.csv") -> Non
         logger.error("CSV missing columns: %s", ", ".join(sorted(missing)))
         return
 
-    df = df.dropna(subset=["date", "index_code", "value"])
+    df = df.dropna(subset=["date", "index_code", "value", "source"])
     df["date"] = pd.to_datetime(df["date"], errors="coerce")
     df["value"] = pd.to_numeric(df["value"], errors="coerce")
+    df["source"] = df["source"].astype(str)
     df = df.dropna(subset=["date", "value"])
 
     if df.empty:
