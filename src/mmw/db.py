@@ -78,6 +78,7 @@ class News(Base):
     url = Column(String, unique=True, nullable=False)
     title = Column(String, nullable=False)
     summary = Column(Text)
+    summary_ai = Column(Text)
     published_at = Column(DateTime)
     source = Column(String)
 
@@ -86,8 +87,12 @@ class Entity(Base):
     __tablename__ = "entities"
 
     id = Column(Integer, primary_key=True)
-    name = Column(String, nullable=False)
-    type = Column(String)
+    news_id = Column(Integer, ForeignKey("news.id"), nullable=False)
+    type = Column(String, nullable=False)
+    value = Column(String, nullable=False)
+    score = Column(Float)
+
+    news = relationship("News")
 
 
 class Link(Base):
