@@ -13,3 +13,4 @@ click
 python-dateutil
 sumy
 spacy
+streamlit

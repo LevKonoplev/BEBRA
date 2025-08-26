@@ -10,5 +10,8 @@ authors = [{name = "Your Name", email = "you@example.com"}]
 readme = "README.md"
 requires-python = ">=3.11"
 
+[project.scripts]
+mmw = "mmw.cli:cli"
+
 [tool.setuptools.packages.find]
 where = ["src"]
