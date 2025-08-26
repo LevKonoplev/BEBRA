@@ -1,0 +1,15 @@
+yfinance
+pandas
+numpy
+plotly
+feedparser
+beautifulsoup4
+requests
+lxml
+tqdm
+SQLAlchemy
+aiosqlite
+click
+python-dateutil
+sumy
+spacy
