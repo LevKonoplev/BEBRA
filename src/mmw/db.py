@@ -75,6 +75,7 @@ class News(Base):
     __tablename__ = "news"
 
     id = Column(Integer, primary_key=True)
+    url = Column(String, unique=True, nullable=False)
     title = Column(String, nullable=False)
     summary = Column(Text)
     published_at = Column(DateTime)

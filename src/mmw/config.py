@@ -28,8 +28,10 @@ INDEX_CODES = [
 ]
 
 RSS_FEEDS = [
-    "https://example.com/feed1",
-    "https://example.com/feed2",
+    "https://www.hellenicshippingnews.com/feed/",
+    "https://www.maritime-executive.com/rss",
+    "https://gcaptain.com/feed/",
+    # TODO: add more sources
 ]
 
 DATA_DIR = Path("data")
