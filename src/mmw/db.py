@@ -100,8 +100,9 @@ class Link(Base):
 
     id = Column(Integer, primary_key=True)
     news_id = Column(Integer, ForeignKey("news.id"), nullable=False)
-    url = Column(String, nullable=False)
-    description = Column(String)
+    asset_ticker = Column(String)
+    index_code = Column(String)
+    score = Column(Float, nullable=False)
 
 
 class Run(Base):
