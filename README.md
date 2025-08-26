@@ -51,3 +51,17 @@ python -m mmw.prices --since 2022-01-01
 - **FBX** — Freightos Baltic Index. Официальная страница: https://fbx.freightos.com/
 
 Парсеры для получения текущих значений доступны, однако использовать их следует только если это не нарушает условия использования сайтов и правила robots.txt. В остальных случаях данные лучше загружать вручную через CSV.
+
+## Новости (RSS)
+Проект может получать новости из открытых RSS-лент отраслевых изданий.
+Примеры источников:
+
+- [Hellenic Shipping News](https://www.hellenicshippingnews.com/feed/)
+- [Maritime Executive](https://www.maritime-executive.com/rss)
+- [gCaptain](https://gcaptain.com/feed/)
+
+Новости можно загрузить и сохранить в базу данных командой:
+
+```bash
+python -m mmw.news
+```
