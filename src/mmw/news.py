@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 from typing import List, Dict
 
 import feedparser
@@ -13,11 +14,17 @@ from sqlalchemy.orm import sessionmaker
 from .config import RSS_FEEDS
 from .db import News, engine
 
+logger = logging.getLogger(__name__)
+
 
 def fetch_rss(feed_url: str) -> List[Dict]:
     """Fetch an RSS/Atom feed and return list of items."""
 
-    parsed = feedparser.parse(feed_url)
+    try:
+        parsed = feedparser.parse(feed_url)
+    except Exception as exc:
+        logger.error("Failed to parse RSS feed %s: %s", feed_url, exc)
+        return []
     source = parsed.feed.get("title", feed_url)
     items: List[Dict] = []
     for entry in parsed.entries:
@@ -84,11 +91,14 @@ def refresh_news() -> None:
     total_new = 0
     for feed in RSS_FEEDS:
         items = fetch_rss(feed)
+        if not items:
+            logger.info("%s: no articles fetched", feed)
+            continue
         df = normalize_news(items)
         new_rows = upsert_news(df)
-        print(f"{feed}: {new_rows} new articles")
+        logger.info("%s: %s new articles", feed, new_rows)
         total_new += new_rows
-    print(f"Total new articles: {total_new}")
+    logger.info("Total new articles: %s", total_new)
 
 
 if __name__ == "__main__":  # pragma: no cover - manual run
