@@ -98,7 +98,12 @@ def refresh_watchlist_prices() -> None:
     start = (pd.Timestamp.utcnow() - pd.DateOffset(years=3)).strftime("%Y-%m-%d")
     df = fetch_prices_yf(WATCHLIST_TICKERS, start=start)
     upsert_prices(df, engine)
-    print(f"Inserted/updated {len(df)} rows for {df['ticker'].nunique()} tickers since {start}")
+    logging.info(
+        "Inserted/updated %d rows for %d tickers since %s",
+        len(df),
+        df["ticker"].nunique(),
+        start,
+    )
 
 
 def main(since: str | None = None) -> None:
@@ -107,7 +112,12 @@ def main(since: str | None = None) -> None:
     start = since if since else (pd.Timestamp.utcnow() - pd.DateOffset(years=3)).strftime("%Y-%m-%d")
     df = fetch_prices_yf(WATCHLIST_TICKERS, start=start)
     upsert_prices(df, engine)
-    print(f"Processed {len(df)} rows for {df['ticker'].nunique()} tickers since {start}")
+    logging.info(
+        "Processed %d rows for %d tickers since %s",
+        len(df),
+        df["ticker"].nunique(),
+        start,
+    )
 
 
 if __name__ == "__main__":
