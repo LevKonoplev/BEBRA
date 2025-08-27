@@ -7,7 +7,9 @@ from pathlib import Path
 import click
 
 from .indices import refresh_indices
+from .linker import link_news
 from .news import refresh_news
+from .nlp import enrich_news
 from .prices import refresh_watchlist_prices
 from .report import build_site
 
@@ -24,6 +26,8 @@ def refresh_all() -> None:
     refresh_watchlist_prices()
     refresh_indices()
     refresh_news()
+    enrich_news()
+    link_news()
     click.echo("Data refreshed")
 
 
