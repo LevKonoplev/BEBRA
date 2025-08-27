@@ -34,6 +34,12 @@ RSS_FEEDS = [
     # TODO: add more sources
 ]
 
+import os
+
+extra = os.getenv("MMW_EXTRA_FEEDS")
+if extra:
+    RSS_FEEDS.extend([u.strip() for u in extra.split(",") if u.strip()])
+
 DATA_DIR = Path("data")
 DB_PATH = DATA_DIR / "mmw.sqlite"
 DOCS_DIR = Path("docs")
