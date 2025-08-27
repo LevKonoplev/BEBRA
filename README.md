@@ -30,6 +30,7 @@
 
 ```bash
 mmw refresh-all   # загрузить цены, индексы и новости, обогатить и связать их
+mmw import-indices          # импортировать индексы из data/indices_manual.csv
 mmw build-site    # собрать статический сайт в docs/
 mmw open-site     # открыть docs/index.html в браузере
 ```

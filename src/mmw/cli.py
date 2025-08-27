@@ -9,7 +9,7 @@ import click
 from .analytics import compute_daily_returns, news_intensity
 from .config import WATCHLIST_TICKERS
 from .db import engine
-from .indices import refresh_indices
+from .indices import refresh_indices, import_indices_from_csv
 from .linker import link_news
 from .news import refresh_news
 from .nlp import enrich_news
@@ -32,6 +32,20 @@ def refresh_all() -> None:
     enrich_news()
     link_news()
     click.echo("Data refreshed")
+
+
+@cli.command("import-indices")
+@click.argument(
+    "path",
+    type=click.Path(path_type=Path),
+    required=False,
+    default=Path("data/indices_manual.csv"),
+)
+def import_indices_cmd(path: Path) -> None:
+    """Import indices from a CSV file into the database."""
+
+    import_indices_from_csv(path)
+    click.echo(f"Imported indices from {path}")
 
 
 @cli.command("build-site")
