@@ -10,6 +10,8 @@ jobs:
   tests:
     if: github.event_name == 'push' || github.event_name == 'pull_request'
     runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: src
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
@@ -18,11 +20,13 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
-          pip install flake8 mypy
+          pip install flake8 mypy pytest
       - name: Run linters
         run: |
           flake8 src
           mypy src
+      - name: Run tests
+        run: pytest
       - name: Smoke test
         run: python -m mmw.prices --since 2022-01-01
 
