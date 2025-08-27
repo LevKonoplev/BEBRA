@@ -4,6 +4,7 @@ from __future__ import annotations
 from typing import List
 
 import logging
+logger = logging.getLogger(__name__)
 
 import pandas as pd
 import yfinance as yf
@@ -28,7 +29,7 @@ def fetch_prices_yf(tickers: List[str], start: str | None = None, end: str | Non
             threads=True,
         )
     except Exception as exc:
-        logging.warning("Failed to download prices: %s", exc)
+        logger.warning("Failed to download prices: %s", exc)
         return pd.DataFrame(
             columns=["ticker", "date", "open", "high", "low", "close", "volume"]
         )
@@ -98,7 +99,7 @@ def refresh_watchlist_prices() -> None:
     start = (pd.Timestamp.utcnow() - pd.DateOffset(years=3)).strftime("%Y-%m-%d")
     df = fetch_prices_yf(WATCHLIST_TICKERS, start=start)
     upsert_prices(df, engine)
-    logging.info(
+    logger.info(
         "Inserted/updated %d rows for %d tickers since %s",
         len(df),
         df["ticker"].nunique(),
@@ -112,7 +113,7 @@ def main(since: str | None = None) -> None:
     start = since if since else (pd.Timestamp.utcnow() - pd.DateOffset(years=3)).strftime("%Y-%m-%d")
     df = fetch_prices_yf(WATCHLIST_TICKERS, start=start)
     upsert_prices(df, engine)
-    logging.info(
+    logger.info(
         "Processed %d rows for %d tickers since %s",
         len(df),
         df["ticker"].nunique(),
