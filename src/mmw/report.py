@@ -1,8 +1,10 @@
 """Generate static HTML reports for Maritime Market Watch."""
 from __future__ import annotations
 
+import logging
 from pathlib import Path
 from typing import List
+
 import pandas as pd
 import plotly.graph_objects as go
 from sqlalchemy import select
@@ -10,6 +12,9 @@ from sqlalchemy import select
 from .config import DOCS_DIR
 from .db import Asset, Index, IndexPoint, News, Price
 from .utils import ensure_dirs
+
+
+logger = logging.getLogger(__name__)
 
 
 def _write_html(fig: go.Figure, path: Path) -> None:
@@ -275,7 +280,7 @@ def main() -> None:
     """CLI entry point to build the report site."""
 
     build_site()
-    print("Site generated in docs/")
+    logger.info("Site generated in docs/")
 
 
 if __name__ == "__main__":  # pragma: no cover - CLI entry
