@@ -96,7 +96,7 @@ def news_intensity(engine) -> pd.DataFrame:
         return pd.DataFrame(columns=["date", "news_count", "avg_sentiment"])
 
     df["date"] = pd.to_datetime(df["published_at"]).dt.date
-    df["sent_len"] = df["summary_ai"].fillna(""").str.len()
+    df["sent_len"] = df["summary_ai"].fillna("").str.len()
 
     agg = (
         df.groupby("date").agg(
