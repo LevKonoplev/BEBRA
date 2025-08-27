@@ -29,7 +29,7 @@
 После установки зависимостей доступна консольная утилита `mmw`:
 
 ```bash
-mmw refresh-all   # загрузить цены, индексы и новости
+mmw refresh-all   # загрузить цены, индексы и новости, обогатить и связать их
 mmw build-site    # собрать статический сайт в docs/
 mmw open-site     # открыть docs/index.html в браузере
 ```
@@ -93,12 +93,21 @@ python -m mmw.prices --since 2022-01-01
 - [Maritime Executive](https://www.maritime-executive.com/rss)
 - [gCaptain](https://gcaptain.com/feed/)
 
-Дополнительные ленты можно указать через переменную окружения `MMW_EXTRA_FEEDS` (список URL через запятую).
-
 Новости можно загрузить и сохранить в базу данных командой:
 
 ```bash
 python -m mmw.news
+```
+
+## Автоматическое обогащение и линковка новостей
+
+Команда `mmw refresh-all` помимо загрузки цен и индексов собирает новости, создаёт краткие пересказы, выделяет сущности и пытается привязать статьи к тикерам и индексам.
+
+Чтобы подключить дополнительные RSS-источники, задайте переменную окружения `MMW_EXTRA_FEEDS` со списком URL через запятую:
+
+```bash
+export MMW_EXTRA_FEEDS="https://example.com/feed/,https://foo.bar/rss"
+mmw refresh-all
 ```
 
 ## AI без ключей
