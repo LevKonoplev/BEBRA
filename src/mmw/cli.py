@@ -6,10 +6,10 @@ from pathlib import Path
 
 import click
 
-from .analytics import compute_daily_returns, news_intensity
+from .analytics import compute_daily_returns, event_study, news_intensity
 from .config import WATCHLIST_TICKERS
 from .db import engine
-from .indices import refresh_indices, import_indices_from_csv
+from .indices import import_indices_from_csv, refresh_indices
 from .linker import link_news
 from .news import refresh_news
 from .nlp import enrich_news
@@ -72,13 +72,25 @@ def analyze() -> None:
     """Run analytical helpers."""
 
 
-@analyze.command("daily-returns")
+@analyze.command("returns")
 @click.argument("tickers", nargs=-1)
-def analyze_daily_returns(tickers: tuple[str, ...]) -> None:
+def analyze_returns(tickers: tuple[str, ...]) -> None:
     """Compute daily returns for TICKERS."""
 
     tickers = tickers or WATCHLIST_TICKERS
     df = compute_daily_returns(engine, tickers)
+    if df.empty:
+        click.echo("No data found")
+    else:
+        click.echo(df.to_csv(index=False))
+
+
+@analyze.command("event-study")
+@click.argument("ticker")
+def analyze_event_study(ticker: str) -> None:
+    """Run event study around news events for TICKER."""
+
+    df = event_study(engine, ticker)
     if df.empty:
         click.echo("No data found")
     else:

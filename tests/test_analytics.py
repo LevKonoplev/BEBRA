@@ -1,6 +1,7 @@
+from datetime import datetime
+
 import pandas as pd
 import pytest
-from datetime import datetime
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 

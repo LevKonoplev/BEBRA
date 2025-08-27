@@ -29,7 +29,7 @@
 После установки зависимостей доступна консольная утилита `mmw`:
 
 ```bash
-mmw refresh-all   # загрузить цены, индексы и новости, обогатить и связать их
+mmw refresh-all             # загрузить цены, индексы и новости, обогатить и связать их
 mmw import-indices          # импортировать индексы из data/indices_manual.csv
 mmw build-site    # собрать статический сайт в docs/
 mmw open-site     # открыть docs/index.html в браузере
@@ -38,7 +38,8 @@ mmw open-site     # открыть docs/index.html в браузере
 Команда `mmw analyze` позволяет выполнить несколько простых аналитических запросов:
 
 ```bash
-mmw analyze daily-returns ZIM SBLK  # посчитать дневные доходности
+mmw analyze returns ZIM SBLK        # посчитать дневные доходности
+mmw analyze event-study ZIM         # event-study вокруг новостей по тикеру
 mmw analyze news-intensity          # агрегировать интенсивность новостей
 ```
 
