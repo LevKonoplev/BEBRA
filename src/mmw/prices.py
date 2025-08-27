@@ -3,6 +3,8 @@ from __future__ import annotations
 
 from typing import List
 
+import logging
+
 import pandas as pd
 import yfinance as yf
 from sqlalchemy import select
@@ -16,9 +18,25 @@ from .db import Asset, Price, engine
 def fetch_prices_yf(tickers: List[str], start: str | None = None, end: str | None = None) -> pd.DataFrame:
     """Download prices from Yahoo Finance via yfinance and return a tidy DataFrame."""
 
-    data = yf.download(tickers, start=start, end=end, group_by="ticker", auto_adjust=True, threads=True)
+    try:
+        data = yf.download(
+            tickers,
+            start=start,
+            end=end,
+            group_by="ticker",
+            auto_adjust=True,
+            threads=True,
+        )
+    except Exception as exc:
+        logging.warning("Failed to download prices: %s", exc)
+        return pd.DataFrame(
+            columns=["ticker", "date", "open", "high", "low", "close", "volume"]
+        )
+
     if data.empty:
-        return pd.DataFrame(columns=["ticker", "date", "open", "high", "low", "close", "volume"])
+        return pd.DataFrame(
+            columns=["ticker", "date", "open", "high", "low", "close", "volume"]
+        )
 
     if isinstance(data.columns, pd.MultiIndex):
         df = data.stack(level=0).rename_axis(["date", "ticker"]).reset_index()
