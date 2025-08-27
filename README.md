@@ -34,6 +34,13 @@ mmw build-site    # собрать статический сайт в docs/
 mmw open-site     # открыть docs/index.html в браузере
 ```
 
+Команда `mmw analyze` позволяет выполнить несколько простых аналитических запросов:
+
+```bash
+mmw analyze daily-returns ZIM SBLK  # посчитать дневные доходности
+mmw analyze news-intensity          # агрегировать интенсивность новостей
+```
+
 Для простого дашборда можно запустить Streamlit:
 
 ```bash

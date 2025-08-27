@@ -6,6 +6,9 @@ from pathlib import Path
 
 import click
 
+from .analytics import compute_daily_returns, news_intensity
+from .config import WATCHLIST_TICKERS
+from .db import engine
 from .indices import refresh_indices
 from .linker import link_news
 from .news import refresh_news
@@ -48,6 +51,35 @@ def open_site() -> None:
         raise click.ClickException("docs/index.html not found. Run 'mmw build-site' first.")
     webbrowser.open(index_path.as_uri())
     click.echo(f"Opened {index_path}")
+
+
+@cli.group()
+def analyze() -> None:
+    """Run analytical helpers."""
+
+
+@analyze.command("daily-returns")
+@click.argument("tickers", nargs=-1)
+def analyze_daily_returns(tickers: tuple[str, ...]) -> None:
+    """Compute daily returns for TICKERS."""
+
+    tickers = tickers or WATCHLIST_TICKERS
+    df = compute_daily_returns(engine, tickers)
+    if df.empty:
+        click.echo("No data found")
+    else:
+        click.echo(df.to_csv(index=False))
+
+
+@analyze.command("news-intensity")
+def analyze_news_intensity() -> None:
+    """Aggregate news intensity by day."""
+
+    df = news_intensity(engine)
+    if df.empty:
+        click.echo("No data found")
+    else:
+        click.echo(df.to_csv(index=False))
 
 
 if __name__ == "__main__":  # pragma: no cover - CLI entry
