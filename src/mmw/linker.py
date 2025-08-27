@@ -52,6 +52,7 @@ def link_news(engine=engine) -> None:
     Session = sessionmaker(bind=engine, future=True)
     with Session.begin() as session:
         news_items = session.execute(select(News)).scalars().all()
+        total_links = 0
         for item in news_items:
             entity_vals = session.execute(
                 select(Entity.value).where(Entity.news_id == item.id)
@@ -64,6 +65,7 @@ def link_news(engine=engine) -> None:
             session.execute(delete(Link).where(Link.news_id == item.id))
 
             # asset mappings
+            item_count = 0
             for name, tickers in MAPPINGS.items():
                 keywords = [name] + tickers
                 score = _match_score(full_text, keywords)
@@ -77,6 +79,8 @@ def link_news(engine=engine) -> None:
                                 score=float(score),
                             )
                         )
+                        item_count += 1
+                        total_links += 1
 
             # index keywords
             for code, keywords in INDEX_KEYWORDS.items():
@@ -90,6 +94,12 @@ def link_news(engine=engine) -> None:
                             score=float(score),
                         )
                     )
+                    item_count += 1
+                    total_links += 1
+
+            logger.debug("News %s: created %d links", item.id, item_count)
+
+        logger.info("Created %d links", total_links)
 
 
 if __name__ == "__main__":  # pragma: no cover - CLI
