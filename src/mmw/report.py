@@ -3,7 +3,6 @@ from __future__ import annotations
 
 from pathlib import Path
 from typing import List
-
 import pandas as pd
 import plotly.graph_objects as go
 from sqlalchemy import select
