@@ -95,6 +95,7 @@ def refresh_news() -> None:
             logger.info("%s: no articles fetched", feed)
             continue
         df = normalize_news(items)
+        df.drop_duplicates(subset="url", inplace=True)
         new_rows = upsert_news(df)
         logger.info("%s: %s new articles", feed, new_rows)
         total_new += new_rows
