@@ -93,6 +93,8 @@ python -m mmw.prices --since 2022-01-01
 - [Maritime Executive](https://www.maritime-executive.com/rss)
 - [gCaptain](https://gcaptain.com/feed/)
 
+Дополнительные ленты можно указать через переменную окружения `MMW_EXTRA_FEEDS` (список URL через запятую).
+
 Новости можно загрузить и сохранить в базу данных командой:
 
 ```bash
